@@ -41,6 +41,10 @@ class Car(models.Model):
     
     def get_full_name(self):
         return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
+    
+    def get_absolute_url(self):
+        return '/carlog/car/%s/%s' % (self.brand, self.car_id)
+
 
 class CarMechanic(models.Model):
     """
@@ -99,4 +103,7 @@ class CarTreatmentEntry(models.Model):
     
     class Meta:
         verbose_name_plural = 'Car treatment entries'
+        
+    def formatted_date(self):
+        return self.date.strftime('%b/%d/%Y')
 
