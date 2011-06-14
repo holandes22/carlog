@@ -1,5 +1,8 @@
 import datetime
 from django.db import models
+from django.contrib.auth.models import User
+
+
 
 class Car(models.Model):
     """
@@ -21,6 +24,7 @@ class Car(models.Model):
     car_id = models.CharField(max_length = 7)
     brand = models.CharField(max_length = 100)
     model = models.CharField(max_length = 100)
+    user = models.ForeignKey(User)
     type = models.IntegerField(choices = TYPE_CHOICES, default = SEDAN_TYPE)
     is_automatic = models.BooleanField(default = True)
     gears = models.IntegerField(default = 5)
@@ -43,7 +47,7 @@ class Car(models.Model):
         return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
     
     def get_absolute_url(self):
-        return '/carlog/car/%s/%s' % (self.brand, self.car_id)
+        return '/carlog/car/%s' % (self.id)
 
 
 class CarMechanic(models.Model):
@@ -58,9 +62,13 @@ class CarMechanic(models.Model):
     country = models.CharField(max_length = 50)
     email = models.EmailField()
     specialization = models.CharField(max_length = 100, default = 'General', help_text = 'Comma separated if several')
-    
+
     def __unicode__(self):
         return "%s %s" % (self.name, self.lastname)
+    
+    def get_absolute_url(self):
+        return '/carlog/car/mechanic/%s' % (self.id)
+    
     
 class CarTreatmentEntry(models.Model):
     """
@@ -104,6 +112,9 @@ class CarTreatmentEntry(models.Model):
     class Meta:
         verbose_name_plural = 'Car treatment entries'
         
+    def __unicode__(self):
+        return '%s %s' % (self.formatted_date(), self.car)
+    
     def formatted_date(self):
         return self.date.strftime('%b/%d/%Y')
 

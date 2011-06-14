@@ -1,20 +1,35 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import auth
+
 
 from carlog.entries.models import Car, CarTreatmentEntry
 
+
+#TODO: make template for empty entries(indexes)
+
+@login_required()
 def car_index(request):
-    return render_to_response('car/car_index.html', {'car_list': Car.objects.all()}, 
+    car_list = Car.objects.filter(user = request.user)
+    return render_to_response('car/car_index.html', {'car_list': car_list, 'user': request.user}, 
                               context_instance = RequestContext(request))
-    
-def car_details(request, brand, car_id):
-    car = get_object_or_404(Car, brand = brand, car_id = car_id)
-    return render_to_response('car/car_details.html', {'car': car}, 
+
+@login_required() 
+def car_details(request, id):
+    car = get_object_or_404(Car, id = id)
+    return render_to_response('car/car_details.html', {'car': car, 'user': request.user}, 
                               context_instance = RequestContext(request))
-    
-def treatment_index(request, brand, car_id):
-    car = get_object_or_404(Car, brand = brand, car_id = car_id)
+
+@login_required()
+def treatment_index(request, id):
+    car = get_object_or_404(Car, id = id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
+    if len(treatment_list) == 0:
+        return HttpResponse('No entries')
     filters = 'Car %s' % (car,) 
     return render_to_response('treatment/treatment_index.html', {'treatment_list': treatment_list, 'filters': filters}, 
                               context_instance = RequestContext(request))
+    
+
