@@ -4,23 +4,25 @@
 {% endblock %}
 {% block body %}
 	<h2>Car index for user {{ user }}</h2>
-		<div id="car_index_accordion" class=accordion_width>
-			{% for car in car_list %}
-			<h3>
-				<a href=#>{{ car.get_full_name }} overview</a>
-			</h3>
-			<div>
-				<table>
+	<div id="car_index_accordion" class=accordion_width>
+		{% for car in car_list %}
+		<h3>
+			<a href=#>{{ car.get_full_name }} overview</a>
+		</h3>
+		<div>
+			<table>
+				{% for key, value in car.get_model_attrs %}
 					<tr>
-						<td>Kilometrage when bought</td>
-						<td>{{ car.kilometrage }}</td>
+						<td>{{ key }}</td>
+						<td>{{ value }}</td>
 					</tr>
-				</table>
-				<a href='{{ car.get_absolute_url }}'>Car details</a><br>
-				<a href='{{ car.get_absolute_url }}/treatment/index'>Car treatments</a>
-			</div>
-			{% endfor %}
+				{% endfor %}
+			</table>
+			<a href='{{ car.get_absolute_url }}'>Car details</a><br>
+			<a href='{{ car.get_absolute_url }}/treatment/index'>Car treatments</a>
 		</div>
+		{% endfor %}
+	</div>
 {% endblock %}
 
 

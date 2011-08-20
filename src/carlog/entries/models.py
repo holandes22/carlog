@@ -8,9 +8,13 @@ class IEntry(object):
     """
     Interface to unite some common methods.
     """
-    def get_model_attrs(self):
+    def get_model_attrs(self, filter = 'id'):
         for field in self._meta.fields:
-            yield field.name, getattr(self, field.name)    
+            if filter not in field.name:
+                if field.choices:
+                    yield field.name, getattr(self, 'get_%s_display' % field.name)
+                else:
+                    yield field.name, getattr(self, field.name)
     
 
 class Car(models.Model, IEntry):
