@@ -2,8 +2,6 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
-
-
 class IEntry(object):
     """
     Interface to unite some common methods.
@@ -61,9 +59,6 @@ class Car(models.Model, IEntry):
     
     def get_absolute_url(self):
         return '/entries/car/%s' % (self.id)
-
-
-
 
 class CarMechanic(models.Model, IEntry):
     """
