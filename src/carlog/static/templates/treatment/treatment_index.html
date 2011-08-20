@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block extra_js %}
+	<script src="{{ STATIC_URL }}lib/jscripts/treatment/treatment_index.js" type='text/javascript'></script>
+{% endblock %}
+{% block body %}
+	<h1>Treatment index filtered by {{ filters }}</h1>
+		
+		<div id="treatment_index_accordion" class=accordion_width>
+			{% for treatment in treatment_list %}
+			<h3>
+				<a href=#>{{ treatment.formatted_date }} </a>
+			</h3>
+			<div>
+				<table>
+					<tr>
+						<td>Mechanic</td>
+						<td><a href='{{ treatment.mechanic.get_absolute_url }}'>{{ treatment.mechanic }}</a></td>
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td><p>{{ treatment.description }}</p></td>
+					</tr>
+					<tr>
+						<td>Kilometrage</td>
+						<td>{{ treatment.kilometrage }}</td>
+					</tr>
+				</table>
+			</div>
+			{% endfor %}
+		</div>
+{% endblock %}

@@ -2,6 +2,8 @@
 
 import os
 
+APP_BASE_DIR = os.path.abspath(os.path.dirname( globals()[ '__file__' ] )) 
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -13,10 +15,10 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'carlog_db',                      # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'password',                  # Not used with sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -62,7 +64,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/home/pablo/Aptana Studio 3 Workspace/carlog_frontend/static/'
+STATIC_URL = os.path.join(APP_BASE_DIR, 'static')
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
@@ -70,7 +72,7 @@ STATIC_URL = '/home/pablo/Aptana Studio 3 Workspace/carlog_frontend/static/'
 ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin/')
 
 # Additional locations of static files
-STATICFILES_DIRS = ('/home/pablo/Aptana Studio 3 Workspace/carlog_frontend/static',
+STATICFILES_DIRS = (STATIC_URL,
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -104,7 +106,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'carlog.urls'
 
-TEMPLATE_DIRS = ('/home/pablo/Aptana Studio 3 Workspace/carlog_frontend/static/templates'
+TEMPLATE_DIRS = (os.path.join(STATIC_URL, 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
