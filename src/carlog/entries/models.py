@@ -4,7 +4,16 @@ from django.contrib.auth.models import User
 
 
 
-class Car(models.Model):
+class IEntry(object):
+    """
+    Interface to unite some common methods.
+    """
+    def get_model_attrs(self):
+        for field in self._meta.fields:
+            yield field.name, getattr(self, field.name)    
+    
+
+class Car(models.Model, IEntry):
     """
     Contains all the car details. The date fields refer to the purchase date.
     """
@@ -47,10 +56,12 @@ class Car(models.Model):
         return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
     
     def get_absolute_url(self):
-        return '/carlog/car/%s' % (self.id)
+        return '/entries/car/%s' % (self.id)
 
 
-class CarMechanic(models.Model):
+
+
+class CarMechanic(models.Model, IEntry):
     """
     Contains information about a mechanic.
     """
@@ -67,10 +78,10 @@ class CarMechanic(models.Model):
         return "%s %s" % (self.name, self.lastname)
     
     def get_absolute_url(self):
-        return '/carlog/car/mechanic/%s' % (self.id)
+        return '/entries/car/mechanic/%s' % (self.id)
     
     
-class CarTreatmentEntry(models.Model):
+class CarTreatmentEntry(models.Model, IEntry):
     """
     Contains the information regarding a treatment that took place or is planned for the future.
     """

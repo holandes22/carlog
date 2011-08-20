@@ -19,7 +19,7 @@ def car_index(request):
 @login_required() 
 def car_details(request, id):
     car = get_object_or_404(Car, id = id)
-    return render_to_response('car/car_details.html', {'car': car, 'user': request.user}, 
+    return render_to_response('generic_details.html', {'car': car, 'user': request.user}, 
                               context_instance = RequestContext(request))
 
 @login_required()
