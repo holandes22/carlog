@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 class IEntry(object):
     """
@@ -13,6 +14,7 @@ class IEntry(object):
                     yield field.name, getattr(self, 'get_%s_display' % field.name)
                 else:
                     yield field.name, getattr(self, field.name)
+        
     
 
 class Car(models.Model, IEntry):
@@ -59,6 +61,10 @@ class Car(models.Model, IEntry):
     
     def get_absolute_url(self):
         return '/entries/car/%s' % (self.id)
+    
+class CarForm(ModelForm):
+    class Meta:
+        model = Car
 
 class CarMechanic(models.Model, IEntry):
     """
@@ -116,7 +122,7 @@ class CarTreatmentEntry(models.Model, IEntry):
     parts_replaced = models.CharField(max_length = 300, default = 'None', help_text = 'Replaced parts during treatment, comma separated')
     description = models.TextField()
     category = models.IntegerField(choices = TREATMENT_CATS, default = BODYWORK_CAT)
-    kilometrage = models.IntegerField(help_text = 'If a future treatment, then the planned kilometrage to take the car for treatment')
+    kilometrage = models.IntegerField(help_text = 'If a future treatment, then the planned kilometrage to take the car to the mechanic')
     cost = models.IntegerField()
     
     class Meta:

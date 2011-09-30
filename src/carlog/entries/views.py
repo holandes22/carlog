@@ -8,6 +8,11 @@ from django.contrib import auth
 from carlog.entries.models import Car, CarTreatmentEntry
 
 
+def mobile_test(request):
+    car_list = Car.objects.filter(user = request.user)
+    return render_to_response('mobile_test.html', {'car_list': car_list, 'user': request.user},
+                              context_instance = RequestContext(request))    
+
 #TODO: make template for empty entries(indexes)
 
 @login_required()

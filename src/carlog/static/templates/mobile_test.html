@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load carlog_extras %}
+{% block extra_css %}
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.css" />
+{% endblock %}
+{% block extra_js %}
+	<script src="{{ STATIC_URL }}lib/jquery.mobile-1.0rc1.min.js" type='text/javascript'></script>
+{% endblock %}
+{% block body %}
+	<!-- Home Page -->
+	<div data-role="page" id="home"> 
+	    <div data-role="header">
+	        <h1>BrassBandResults</h1>
+	    </div> 
+	    <div data-role="content">
+	        <ul data-role="listview" data-inset="true">
+	            <li><a href="#car_index">Cars</a></li>
+	            <li><a href="/contests/">Contests</a></li>
+	            <li><a href="/pieces/">Test Pieces</a></li>
+	            <li><a href="/conductors/">Conductors</a></li>
+	            <li><a href="/adjudicators/">Adjudicators</a></li>
+	            <li><a href="#about">About</a></li>
+	    	</ul>
+	    </div> 
+	    <div data-role="footer">
+	    	<h4>Footer</h4>
+	    </div>
+	 </div>
+	
+	<!--Car index--> 
+	<div data-role="page" id="car_index"> 
+	    <div data-role="header">
+	        <h1>Car index for user {{ user }}</h1>
+	    </div> 
+	    <div data-role="content">
+	    	<ul data-role="listview" data-inset="true">
+	            {% for car in car_list %}
+		            {% for key, value in car.get_model_attrs %}
+		            	<li>{{ key|replace_under_with:" "|capfirst }} : {{ value|capfirst }}</li>
+		            {% endfor %}
+	            {% endfor %}
+	    	</ul>
+	    </div> 
+	    <div data-role="footer">
+	    	<h4>Footer</h4>
+	    </div>
+	 </div>  
+
+	<!-- About Page -->
+	<div data-role="page" id="about">
+	    <div data-role="header">
+	        <h1>About</h1>
+	        <a data-icon="arrow-u" class="ui-btn-right" href="#home">Home</a>
+	    </div> 
+	    <div data-role="content">
+	        <p>About this site</p>
+	    </div> 
+	    <div data-role="footer">
+	        <h4>Footer</h4>
+	    </div> 
+	</div>
+{% endblock %}

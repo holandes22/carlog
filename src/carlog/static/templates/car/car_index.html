@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load carlog_extras %}
 {% block extra_js %}
 	<script src="{{ STATIC_URL }}lib/jscripts/car/car_index.js" type='text/javascript'></script>
 {% endblock %}
@@ -13,8 +14,8 @@
 			<table>
 				{% for key, value in car.get_model_attrs %}
 					<tr>
-						<td>{{ key }}</td>
-						<td>{{ value }}</td>
+						<td>{{ key|replace_under_with:" "|capfirst }}</td>
+						<td>{{ value|capfirst }}</td>
 					</tr>
 				{% endfor %}
 			</table>
