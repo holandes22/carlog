@@ -1,4 +1,21 @@
 .accordion_width{
-	width: 50%;
+	width: 100%;
 	min-width:500px;
+}
+
+.action_pane_width {
+	min-width: 320px;
+    width: 320px;
+}
+/* 
+*Arbitrary values set at start, final values are 
+*set based on the height of the windows by jscript
+*/
+.limit_height {
+    height: 800px;
+    max-height: 800px;
+}
+
+.flow_auto {
+    overflow: auto;
 }
