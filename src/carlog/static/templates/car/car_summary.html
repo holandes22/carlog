@@ -1,0 +1,16 @@
+{% extends "content_base.html" %}
+{% load carlog_extras %}
+{% block body %}
+	<h3>
+		{% if car_list|length == 1 %}
+		    There is one car registered for user {{ user }}:
+		{% else %}
+		    There are {{ car_list|length }} registered for user {{ user }}:
+		{% endif %}
+	</h3>
+	{% for car in car_list %}
+	<ul>
+		<li>{{ car.get_full_name }}</li>
+	</ul>
+	{% endfor %}			
+{% endblock %}
