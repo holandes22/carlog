@@ -18,19 +18,18 @@
 		{% block extra_js %}{% endblock %}
     </head>
     <body>
-<!--     	<div id='tree_container_1'></div> -->
 		<table id="main_table" width="100%">
 			<tr valign="top" >
-				<td id="left_pane">
-					<div id="tree_container" class="limit_height flow_auto ui-tabs ui-widget-content ui-corner-all"></div>
+				<td id="left_pane" class="limit_height flow_auto ui-tabs ui-widget-content ui-corner-all">
+					<div id="tree_container"></div>
 				</td>
-				<td id="right_pane" width="100%" >
-					<div id="right_pane_content" class="limit_height flow_auto ui-tabs ui-widget-content ui-corner-all">
+				<td id="right_pane" width="100%" class="limit_height flow_auto ui-tabs ui-widget-content ui-corner-all">
+					<div id="right_pane_content">
 						{% block body %}{% endblock %}
 					</div>
 				</td>
-				<td id="action_pane" class="action_pane_width">
-					<div id="action_pane_content" class="limit_height flow_auto ui-tabs ui-widget-content ui-corner-all"></div>
+				<td id="action_pane" class="action_pane_width limit_height flow_auto ui-tabs ui-widget-content ui-corner-all">
+					<div id="action_pane_content" ></div>
 				</td>
 			</tr>
 		</table>
