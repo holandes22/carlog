@@ -9,6 +9,19 @@
 		{% block extra_js %}{% endblock %}
     </head>
     <body>
-		{% block body %}{% endblock %}
+    	<table id="content_table" width="100%">
+			<tr valign="top" >
+				<td>
+					{% block body %}{% endblock %}
+				</td>
+				<td class="action_pane_width limit_height flow_auto ui-tabs ui-widget-content ui-corner-all">
+					<h3 class="text_centered">Available actions</h3>
+					<div>
+						{% block action_pane_content %}{% endblock %}
+					</div>
+				</td>
+			</tr>
+		</table>
+		
 	</body>
 </html>

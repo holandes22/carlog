@@ -19,3 +19,7 @@
 .flow_auto {
     overflow: auto;
 }
+
+.text_centered {
+	text-align: center;
+}

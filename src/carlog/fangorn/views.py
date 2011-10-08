@@ -4,7 +4,6 @@ from carlog.fangorn.models import DynatreeNode
 from carlog.entries.models import Car, CarMechanic
 
 #This is the root tree
-#Most of the children nodes are lazy-loaded
 tree_data = [
     {"title": "Search", "key": "search_node", "url": "/search/"},
     {"title": "Account", "key": "account_node", "url": "/account/"},
@@ -12,7 +11,7 @@ tree_data = [
      "title": "Cars", 
      "isFolder": True, 
      "key": "car_index_node", 
-     "url": "/entries/car/index/", 
+     "url": "/entries/car/summary/", 
      "isLazy": True,
      "lazy_loading_url": "/tree/get_car_tree_nodes/"
      },
@@ -29,6 +28,7 @@ tree_data = [
 
 
 def get_tree_nodes(request):
+    tree_data[1]["title"] = "Account (%s)" % (request.user)
     return HttpResponse(json.dumps(tree_data))
 
 def get_car_tree_nodes(request):
@@ -38,7 +38,16 @@ def get_car_tree_nodes(request):
         node = DynatreeNode()
         node.node_attrs['title'] = car.get_full_name()
         node.node_attrs['url'] = "%s/details/"% (car.get_absolute_url())
-        node.node_attrs['isFolder'] = False
+        node.node_attrs['isFolder'] = True
+        
+        node_child = DynatreeNode()
+        node_child.node_attrs['title'] = "Treatments"
+        node_child.node_attrs['lazy_loading_url'] = "/tree/get_treatment_tree_nodes/%s/" % (car.id)
+        node_child.node_attrs['url'] = "/entries/car/%s/treatment/index/" % (car.id)
+        node_child.node_attrs['isFolder'] = False
+        node_child.node_attrs['isLazy'] = True
+        node.node_attrs['children'] = [node_child.node_attrs]    
+        
         children.append(node.node_attrs)
     return HttpResponse(json.dumps(children))
 
