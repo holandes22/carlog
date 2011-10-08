@@ -1,5 +1,5 @@
 function resize_main_window() {
-	var h = $(window).height() - 32;
+	var h = $(window).height() - 36;
 	$('.limit_height').css({
 		'height' : h + 'px',
 		'max-height' : h + 'px'

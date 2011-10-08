@@ -15,7 +15,8 @@ class IEntry(object):
                 else:
                     yield field.name, getattr(self, field.name)
         
-    
+class Action(object):
+    pass   
 
 class Car(models.Model, IEntry):
     """
@@ -34,7 +35,7 @@ class Car(models.Model, IEntry):
                   (SPORT_TYPE, 'Sport'),
                   )
     
-    car_id = models.CharField(max_length = 7)
+    #car_id = models.CharField(max_length = 7)
     brand = models.CharField(max_length = 100)
     model = models.CharField(max_length = 100)
     user = models.ForeignKey(User)
@@ -47,8 +48,8 @@ class Car(models.Model, IEntry):
     kilometrage = models.IntegerField(help_text = 'Kilometrage when purchased')
     color = models.CharField(max_length = 100)
     
-    class Meta:
-        unique_together = ('car_id', 'brand')
+#    class Meta:
+#        unique_together = ('car_id', 'brand')
     
     def __unicode__(self):
         return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))

@@ -33,14 +33,16 @@ def car_details(request, id):
                               context_instance = RequestContext(request))
     
 def car_editor(request, id = None):
-    form = CarForm(request.POST or None, instance=id and Car.objects.get(id = id))
-
+    form = CarForm(request.POST or None, instance = id and Car.objects.get(pk = id))
+    submit_url = id and "/entries/car/%s/editor/" % id or "/entries/car/editor/"
     # Save new/edited System
     if request.method == 'POST' and form.is_valid():
         form.save()
         return redirect('/')
+    
+    return render_to_response('car/car_editor.html', { 'form':form, 'submit_url': submit_url }, 
+                              context_instance = RequestContext(request))
 
-    return render_to_response('car/car_editor.html', {'form':form}, context_instance = RequestContext(request))
 
 @login_required()
 def treatment_index(request, id):

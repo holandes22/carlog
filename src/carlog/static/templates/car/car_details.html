@@ -20,3 +20,6 @@
 		</div>
 	</div>
 {% endblock %}
+{% block action_pane_content %}
+<button onclick="$('#editor_dialog').load('/entries/car/{{ car.id }}/editor/');">Edit car</button>
+{% endblock %}
