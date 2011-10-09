@@ -16,12 +16,6 @@ def mobile_test(request):
                               context_instance = RequestContext(request))    
 
 @login_required()
-def car_index(request):
-    car_list = Car.objects.filter(user = request.user)
-    return render_to_response('car/car_index.html', {'car_list': car_list, 'user': request.user}, 
-                              context_instance = RequestContext(request))
-
-@login_required()
 def car_summary(request):
     car_list = Car.objects.filter(user = request.user)
     return render_to_response('car/car_summary.html', {'car_list': car_list, 'user': request.user}, 
@@ -39,12 +33,13 @@ def car_editor(request, id = None):
     except ObjectDoesNotExist:
         car = None
     form = CarForm(request.POST or None, instance = car)
-    submit_url = car and car.get_absolute_editor_url() or Car.get_model_editor_url()
+    
     #Save new/edited System
     if request.method == 'POST' and form.is_valid():
         form.save()
         return HttpResponse('saved')
     
+    submit_url = car and car.get_absolute_editor_url() or Car.get_model_editor_url()
     return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
                               context_instance = RequestContext(request))
 

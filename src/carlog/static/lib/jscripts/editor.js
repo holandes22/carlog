@@ -1,4 +1,4 @@
-function load_editor_dialog(){
+function loadEditorDialog(){
 	$.ajax({
 		url: $("#editor_form").attr('action'),
 		type: 'POST',
@@ -19,7 +19,7 @@ $(document).ready(function() {
 	$( "#editor_dialog" ).dialog({
 		autoOpen: false,
 		buttons: {
-			Save: load_editor_dialog,
+			Save: loadEditorDialog,
 			Cancel: function() {
 				$( this ).dialog( "close" );
 			},

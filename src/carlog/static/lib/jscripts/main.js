@@ -1,4 +1,4 @@
-function resize_main_window() {
+function resizeMainWindow() {
 	var h = $(window).height() - 36;
 	$('.limit_height').css({
 		'height' : h + 'px',
@@ -9,8 +9,8 @@ function resize_main_window() {
 
 $(document).ready(function() {
 	$(window).bind('resize', function() {
-		resize_main_window();
+		resizeMainWindow();
 	});
-	resize_main_window();
+	resizeMainWindow();
 });
 

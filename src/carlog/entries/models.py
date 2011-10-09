@@ -16,7 +16,9 @@ class IEntry(object):
                     yield field.name, getattr(self, field.name)
         
 class Action(object):
-    pass   
+    
+    def __init__(self, ):
+        pass   
 
 class Car(models.Model, IEntry):
     """
@@ -35,7 +37,6 @@ class Car(models.Model, IEntry):
                   (SPORT_TYPE, 'Sport'),
                   )
     
-    #car_id = models.CharField(max_length = 7)
     brand = models.CharField(max_length = 100)
     model = models.CharField(max_length = 100)
     user = models.ForeignKey(User)
