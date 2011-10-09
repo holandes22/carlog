@@ -9,7 +9,9 @@ function loadEditorDialog(){
 				reactivateCurrentTreeNode();
 				return;
 			}
-			$('#editor_dialog').html(data);	
+			//We got errors
+			$('#editor_dialog').html(data);
+			$('.field_error').effect("highlight", { times: 3 }, 1200);
 		},
 	})
 	
@@ -18,6 +20,7 @@ function loadEditorDialog(){
 $(document).ready(function() {
 	$( "#editor_dialog" ).dialog({
 		autoOpen: false,
+		width: 'auto',
 		buttons: {
 			Save: loadEditorDialog,
 			Cancel: function() {
