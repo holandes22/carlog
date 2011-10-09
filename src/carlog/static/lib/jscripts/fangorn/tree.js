@@ -1,8 +1,19 @@
+CURRENT_TREE_NODE = null;
+
+function reactivateCurrentTreeNode() {
+	if(CURRENT_TREE_NODE){
+		CURRENT_TREE_NODE.deactivate();
+		CURRENT_TREE_NODE.activate();
+	}	
+}
+
+
 function errorHandler(node, XMLHttpRequest, textStatus, errorThrown){
 	$('#right_pane_content').load(textStatus);
 }
 
-function onClickHandler(node){
+function onActivateHandler(node){
+	CURRENT_TREE_NODE = node;
 	$.ajax({
 		url: node.data.url,
 		success: function(data, textStatus, jqXHR){
@@ -31,6 +42,6 @@ $(document).ready(function() {
 			url : "/tree/get_tree_nodes/"
 		},
 		onLazyRead : onLazyReadHandler,
-		onClick: onClickHandler,
+		onActivate: onActivateHandler,
 	});
 });

@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.core.exceptions import ObjectDoesNotExist
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -13,25 +14,6 @@ def mobile_test(request):
     car_list = Car.objects.filter(user = request.user)
     return render_to_response('mobile_test.html', {'car_list': car_list, 'user': request.user},
                               context_instance = RequestContext(request))    
-
-def generic_editor(request, type, id = None):
-    object_name = type.capitalize()
-    object_form_name = '%sForm' % object_name
-    object = getattr(carlog.entries.models, object_name, None)
-    object_form = getattr(carlog.entries.models, object_form_name, None)
-    if not object_form or not object:
-        return Http404
-    
-    
-    form = object_form(request.POST or None, instance = id and object.objects.get(pk = id))
-    submit_url = id and "/entries/%s/%s/editor/" % (type, id) or "/entries/%s/editor/" % (type)
-    # Save new/edited System
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('/')
-    
-    return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
-                              context_instance = RequestContext(request))
 
 @login_required()
 def car_index(request):
@@ -52,12 +34,16 @@ def car_details(request, id):
                               context_instance = RequestContext(request))
     
 def car_editor(request, id = None):
-    form = CarForm(request.POST or None, instance = id and Car.objects.get(pk = id))
-    submit_url = id and "/entries/car/%s/editor/" % id or "/entries/car/editor/"
-    # Save new/edited System
+    try:
+        car = Car.objects.get(pk = id)
+    except ObjectDoesNotExist:
+        car = None
+    form = CarForm(request.POST or None, instance = car)
+    submit_url = car and car.get_absolute_editor_url() or Car.get_model_editor_url()
+    #Save new/edited System
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('/')
+        return HttpResponse('saved')
     
     return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
                               context_instance = RequestContext(request))

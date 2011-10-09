@@ -63,6 +63,14 @@ class Car(models.Model, IEntry):
     def get_absolute_url(self):
         return '/entries/car/%s' % (self.id)
     
+    @classmethod
+    def get_model_editor_url(self):
+        return '/entries/car/editor/'
+        
+    def get_absolute_editor_url(self):
+        return '%s/editor/' % (self.get_absolute_url())
+        
+    
 class CarForm(ModelForm):
     class Meta:
         model = Car
