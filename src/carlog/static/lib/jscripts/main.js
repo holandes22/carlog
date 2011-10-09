@@ -6,6 +6,7 @@ function resize_main_window() {
 	});
 }
 
+
 $(document).ready(function() {
 	$(window).bind('resize', function() {
 		resize_main_window();
