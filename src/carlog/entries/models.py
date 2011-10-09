@@ -3,10 +3,24 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
+
+class Action(object):
+    
+    def __init__(self, action_url, action_name):
+        self.action_url = action_url
+        self.action_name = action_name
+        
 class IEntry(object):
     """
     Interface to unite some common methods.
     """
+    
+    class_verbose_name = None
+    """
+    Must be set by the Entry model to work out the urls.
+    """
+    actions = None
+        
     def get_model_attrs(self, filter = 'id'):
         for field in self._meta.fields:
             if filter not in field.name:
@@ -14,12 +28,34 @@ class IEntry(object):
                     yield field.name, getattr(self, 'get_%s_display' % field.name)
                 else:
                     yield field.name, getattr(self, field.name)
-        
-class Action(object):
     
-    def __init__(self, ):
-        pass   
 
+        
+    def get_absolute_url(self):
+        return '/entries/%s/%s' % (self.class_verbose_name, self.id)
+        
+    def get_absolute_editor_url(self):
+        return '%s/editor/' % (self.get_absolute_url())
+    
+    def get_delete_entry_url(self):
+        return '/none'
+    
+    @classmethod
+    def get_model_editor_url(cls):
+        return '/entries/%s/editor/' % (cls.class_verbose_name, )
+    
+    def get_common_actions(self):
+        if self.actions is not None:
+            return self.actions 
+        self.actions = []
+        self.actions.append(Action(self.get_model_editor_url(), 'Add %s' % self.class_verbose_name)) #Must be 0 index
+        self.actions.append(Action(self.get_absolute_editor_url(), 'Edit %s' % self.class_verbose_name))
+        self.actions.append(Action(self.get_delete_entry_url(), 'Delete %s' % self.class_verbose_name))
+        return self.actions
+
+        
+
+        
 class Car(models.Model, IEntry):
     """
     Contains all the car details. The date fields refer to the purchase date.
@@ -49,8 +85,7 @@ class Car(models.Model, IEntry):
     kilometrage = models.IntegerField(help_text = 'Kilometrage when purchased')
     color = models.CharField(max_length = 100)
     
-#    class Meta:
-#        unique_together = ('car_id', 'brand')
+    class_verbose_name = 'car'
     
     def __unicode__(self):
         return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
@@ -60,17 +95,6 @@ class Car(models.Model, IEntry):
     
     def get_full_name(self):
         return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
-    
-    def get_absolute_url(self):
-        return '/entries/car/%s' % (self.id)
-    
-    @classmethod
-    def get_model_editor_url(self):
-        return '/entries/car/editor/'
-        
-    def get_absolute_editor_url(self):
-        return '%s/editor/' % (self.get_absolute_url())
-        
     
 class CarForm(ModelForm):
     class Meta:
@@ -89,12 +113,11 @@ class CarMechanic(models.Model, IEntry):
     email = models.EmailField()
     specialization = models.CharField(max_length = 100, default = 'General', help_text = 'Comma separated if several')
 
+    class_verbose_name = 'car-mechanic'
+    
     def __unicode__(self):
         return "%s %s" % (self.name, self.lastname)
-    
-    def get_absolute_url(self):
-        return '/entries/car/mechanic/%s' % (self.id)
-    
+   
     
 class CarTreatmentEntry(models.Model, IEntry):
     """
@@ -134,6 +157,8 @@ class CarTreatmentEntry(models.Model, IEntry):
     category = models.IntegerField(choices = TREATMENT_CATS, default = BODYWORK_CAT)
     kilometrage = models.IntegerField(help_text = 'If a future treatment, then the planned kilometrage to take the car to the mechanic')
     cost = models.IntegerField()
+    
+    class_verbose_name = 'car-treatment'
     
     class Meta:
         verbose_name_plural = 'Car treatment entries'

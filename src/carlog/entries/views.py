@@ -18,15 +18,20 @@ def mobile_test(request):
 @login_required()
 def car_summary(request):
     car_list = Car.objects.filter(user = request.user)
-    return render_to_response('car/car_summary.html', {'car_list': car_list, 'user': request.user}, 
+    available_actions = [car_list[0].get_common_actions()[0]]
+    return render_to_response('car/car_summary.html', 
+                              {'car_list': car_list, 'user': request.user,'available_actions':available_actions}, 
                               context_instance = RequestContext(request))
 
 @login_required() 
 def car_details(request, id):
     car = get_object_or_404(Car, id = id)
-    return render_to_response('car/car_details.html', {'car': car, 'user': request.user}, 
+    available_actions = car.get_common_actions()
+    return render_to_response('car/car_details.html',
+                              {'car': car, 'user': request.user, 'available_actions':available_actions}, 
                               context_instance = RequestContext(request))
-    
+
+@login_required()  
 def car_editor(request, id = None):
     try:
         car = Car.objects.get(pk = id)

@@ -14,5 +14,7 @@
 	{% endfor %}			
 {% endblock %}
 {% block action_pane_content %}
-	<button onclick="$('#editor_dialog').load('/entries/car/editor/').dialog('open');">Add car</button>
+	{% for available_action in available_actions %}
+		<button onclick="$('#editor_dialog').load('{{ available_action.action_url }}').dialog('open');">{{ available_action.action_name }}</button>
+	{% endfor %}
 {% endblock %}
