@@ -5,15 +5,22 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib import auth
 
+from carlog.entries.models import Car, CarForm
+from carlog.entries.models import CarMechanic, CarMechanicForm
+from carlog.entries.models import CarTreatmentEntry
 
-from carlog.entries.models import Car, CarTreatmentEntry
-from carlog.entries.models import CarForm
 
+#=======================================================================================================================
+# Test Methods
+#=======================================================================================================================
 
 def mobile_test(request):
-    car_list = Car.objects.filter(user = request.user)
+    car_list = CarMechanic.objects.filter(user = request.user)
     return render_to_response('mobile_test.html', {'car_list': car_list, 'user': request.user},
                               context_instance = RequestContext(request))    
+#=======================================================================================================================
+# CarMechanic Methods
+#=======================================================================================================================
 
 @login_required()
 def car_summary(request):
@@ -48,14 +55,54 @@ def car_editor(request, id = None):
     return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
                               context_instance = RequestContext(request))
 
+#=======================================================================================================================
+# Mechanic methods
+#=======================================================================================================================
+
+@login_required()
+def mechanic_summary(request):
+    mechanic_list = CarMechanic.objects.filter(user = request.user)
+    available_actions = [mechanic_list[0].get_common_actions()[0]]
+    return render_to_response('entry/entry_summary.html', 
+                              {'entry_list': mechanic_list, 'user': request.user,'available_actions':available_actions}, 
+                              context_instance = RequestContext(request))
+
+@login_required() 
+def mechanic_details(request, id):
+    mechanic = get_object_or_404(CarMechanic, id = id)
+    available_actions = mechanic.get_common_actions()
+    return render_to_response('entry/entry_details.html',
+                              {'entry': mechanic, 'user': request.user, 'available_actions':available_actions}, 
+                              context_instance = RequestContext(request))
+    
+@login_required()  
+def mechanic_editor(request, id = None):
+    try:
+        mechanic = CarMechanic.objects.get(pk = id)
+    except ObjectDoesNotExist:
+        mechanic = None
+    form = CarMechanicForm(request.POST or None, instance = mechanic)
+    
+    #Save new/edited System
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return HttpResponse('saved')
+    
+    submit_url = mechanic and mechanic.get_absolute_editor_url() or CarMechanic.get_model_editor_url()
+    return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
+                              context_instance = RequestContext(request))
+    
+#=======================================================================================================================
+# Treatment methods 
+#=======================================================================================================================
 
 @login_required()
 def treatment_index(request, id):
-    car = get_object_or_404(Car, id = id)
+    car = get_object_or_404(CarMechanic, id = id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
     if len(treatment_list) == 0:
         return render_to_response('no_entries.html')
-    filters = 'Car %s' % (car,) 
+    filters = 'CarMechanic %s' % (car,) 
     return render_to_response('treatment/treatment_index.html', {'treatment_list': treatment_list, 'filters': filters}, 
                               context_instance = RequestContext(request))
     

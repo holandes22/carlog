@@ -10,19 +10,25 @@ tree_data = [
     {
      "title": "Cars", 
      "isFolder": True, 
-     "key": "car_index_node", 
+     "key": "car_summary_node", 
      "url": "/entries/car/summary/", 
      "isLazy": True,
-     "lazy_loading_url": "/tree/get_car_tree_nodes/"
+     "lazy_loading_url": "/tree/get_car_tree_nodes/",
      },
      {
      "title": "Mechanics", 
      "isFolder": True, 
-     "key": "mechanic_index_node", 
-     #"url": "/entries/mechanic/index/",
-     "url": "/entries/car/mobile_test/",
+     "key": "mechanic_summary_node", 
+     "url": "/entries/mechanic/summary/",
      "isLazy": True,
-     "lazy_loading_url": "/tree/get_mechanic_tree_nodes/"
+     "lazy_loading_url": "/tree/get_mechanic_tree_nodes/",
+     },
+     {
+     "title": "Mobile Test", 
+     "isFolder": False, 
+     "key": "mobile_test_node", 
+     "url": "/entries/car/mobile_test/",
+     "isLazy": False,
      },
 ]
 

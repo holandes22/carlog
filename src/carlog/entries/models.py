@@ -42,7 +42,7 @@ class IEntry(object):
         return '/none'
     
     def get_entry_name(self):
-        return self.entry_name
+        return self.class_verbose_name
     
     def get_entry_name_plural(self):
         return self.entry_name_plural
@@ -91,7 +91,6 @@ class Car(models.Model, IEntry):
     color = models.CharField(max_length = 100)
     
     class_verbose_name = 'car'
-    entry_name = 'car'
     entry_name_plural = 'cars'
     
     def __unicode__(self):
@@ -108,17 +107,17 @@ class CarMechanic(models.Model, IEntry):
     """
     Contains information about a mechanic.
     """
+    user = models.ForeignKey(User)
     name = models.CharField(max_length = 100)
     lastname = models.CharField(max_length = 100)
     telephone = models.CharField(max_length = 20)
     address = models.CharField(max_length = 150)
     city = models.CharField(max_length = 50)
     country = models.CharField(max_length = 50)
-    email = models.EmailField()
+    email = models.EmailField(blank = True)
     specialization = models.CharField(max_length = 100, default = 'General', help_text = 'Comma separated if several')
 
-    class_verbose_name = 'car-mechanic'
-    entry_name = 'mechanic'
+    class_verbose_name = 'mechanic'
     entry_name_plural = 'mechanics'
     
     def __unicode__(self):
