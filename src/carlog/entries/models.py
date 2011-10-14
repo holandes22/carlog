@@ -29,7 +29,8 @@ class IEntry(object):
                 else:
                     yield field.name, getattr(self, field.name)
     
-
+    def get_full_name(self):
+        return self.__unicode__()
         
     def get_absolute_url(self):
         return '/entries/%s/%s' % (self.class_verbose_name, self.id)
@@ -39,6 +40,12 @@ class IEntry(object):
     
     def get_delete_entry_url(self):
         return '/none'
+    
+    def get_entry_name(self):
+        return self.entry_name
+    
+    def get_entry_name_plural(self):
+        return self.entry_name_plural
     
     @classmethod
     def get_model_editor_url(cls):
@@ -52,8 +59,6 @@ class IEntry(object):
         self.actions.append(Action(self.get_absolute_editor_url(), 'Edit %s' % self.class_verbose_name))
         self.actions.append(Action(self.get_delete_entry_url(), 'Delete %s' % self.class_verbose_name))
         return self.actions
-
-        
 
         
 class Car(models.Model, IEntry):
@@ -86,15 +91,14 @@ class Car(models.Model, IEntry):
     color = models.CharField(max_length = 100)
     
     class_verbose_name = 'car'
+    entry_name = 'car'
+    entry_name_plural = 'cars'
     
     def __unicode__(self):
         return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
     
     def was_new_when_bought(self):
         return self.hand == 0
-    
-    def get_full_name(self):
-        return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
     
 class CarForm(ModelForm):
     class Meta:
@@ -114,9 +118,16 @@ class CarMechanic(models.Model, IEntry):
     specialization = models.CharField(max_length = 100, default = 'General', help_text = 'Comma separated if several')
 
     class_verbose_name = 'car-mechanic'
+    entry_name = 'mechanic'
+    entry_name_plural = 'mechanics'
     
     def __unicode__(self):
         return "%s %s" % (self.name, self.lastname)
+    
+class CarMechanicForm(ModelForm):
+    class Meta:
+        model = CarMechanic
+    
    
     
 class CarTreatmentEntry(models.Model, IEntry):

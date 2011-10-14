@@ -1,0 +1,27 @@
+{% extends "content_base.html" %}
+{% load carlog_extras %}
+{% block extra_js %}
+	<script src="{{ STATIC_URL }}lib/jscripts/entry/entry_details.js" type='text/javascript'></script>
+{% endblock %}
+{% block body %}
+	<div id="entry_details_accordion" class=accordion_width>
+		<h3>
+			<a href=#>{{ entry.get_full_name }} overview</a>
+		</h3>
+		<div>
+			<table>
+				{% for key, value in entry.get_model_attrs %}
+					<tr>
+						<td>{{ key|replace_under_with:" "|capfirst }}</td>
+						<td>{{ value|capfirst }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+{% endblock %}
+{% block action_pane_content %}
+	{% for available_action in available_actions %}
+		<button onclick="$('#editor_dialog').load('{{ available_action.action_url }}').dialog('open');">{{ available_action.action_name }}</button>
+	{% endfor %}
+{% endblock %}
