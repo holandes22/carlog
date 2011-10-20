@@ -25,9 +25,8 @@ def mobile_test(request):
 @login_required()
 def car_summary(request):
     car_list = Car.objects.filter(user = request.user)
-    available_actions = [car_list[0].get_common_actions()[0]]
     return render_to_response('entry/entry_summary.html', 
-                              {'entry_list': car_list, 'user': request.user,'available_actions':available_actions}, 
+                              {'entry_list': car_list, 'user': request.user,'available_actions':Car.get_add_action()}, 
                               context_instance = RequestContext(request))
 
 @login_required() 
@@ -62,9 +61,11 @@ def car_editor(request, id = None):
 @login_required()
 def mechanic_summary(request):
     mechanic_list = CarMechanic.objects.filter(user = request.user)
-    available_actions = [mechanic_list[0].get_common_actions()[0]]
     return render_to_response('entry/entry_summary.html', 
-                              {'entry_list': mechanic_list, 'user': request.user,'available_actions':available_actions}, 
+                              {
+                               'entry_list': mechanic_list, 'user': request.user,
+                               'available_actions':CarMechanic.get_add_action()
+                               }, 
                               context_instance = RequestContext(request))
 
 @login_required() 
@@ -97,23 +98,14 @@ def mechanic_editor(request, id = None):
 #=======================================================================================================================
 
 @login_required()
-def treatment_index(request, id):
-    car = get_object_or_404(CarMechanic, id = id)
-    treatment_list = CarTreatmentEntry.objects.filter(car = car)
-    if len(treatment_list) == 0:
-        return render_to_response('no_entries.html')
-    filters = 'CarMechanic %s' % (car,) 
-    return render_to_response('treatment/treatment_index.html', {'treatment_list': treatment_list, 'filters': filters}, 
-                              context_instance = RequestContext(request))
-
-
-@login_required()
 def treatment_summary(request, car_id):
     car = get_object_or_404(Car, id = car_id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
-    available_actions = [treatment_list[0].get_common_actions()[0]]
     return render_to_response('entry/entry_summary.html', 
-                              {'entry_list': treatment_list, 'user': request.user,'available_actions':available_actions}, 
+                              {
+                               'entry_list': treatment_list, 'user': request.user,
+                               'available_actions':CarTreatmentEntry.get_add_action()
+                               }, 
                               context_instance = RequestContext(request))
 
 @login_required() 
@@ -129,7 +121,7 @@ def treatment_editor(request, id = None):
     try:
         treatment = CarTreatmentEntry.objects.get(pk = id)
     except ObjectDoesNotExist:
-        mechanic = None
+        treatment = None
     form = CarTreatmentEntryForm(request.POST or None, instance = treatment)
     
     #Save new/edited System
@@ -137,7 +129,7 @@ def treatment_editor(request, id = None):
         form.save()
         return HttpResponse('saved')
     
-    submit_url = mechanic and mechanic.get_absolute_editor_url() or CarMechanic.get_model_editor_url()
+    submit_url = treatment and treatment.get_absolute_editor_url() or CarTreatmentEntry.get_model_editor_url()
     return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
                               context_instance = RequestContext(request))
 

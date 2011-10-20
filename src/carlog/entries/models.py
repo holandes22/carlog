@@ -51,11 +51,14 @@ class IEntry(object):
     def get_model_editor_url(cls):
         return '/entries/%s/editor/' % (cls.class_verbose_name, )
     
+    @classmethod
+    def get_add_action(cls):
+        return [Action(cls.get_model_editor_url(), 'Add %s' % cls.class_verbose_name)]
+    
     def get_common_actions(self):
         if self.actions is not None:
             return self.actions 
-        self.actions = []
-        self.actions.append(Action(self.get_model_editor_url(), 'Add %s' % self.class_verbose_name)) #Must be 0 index
+        self.actions = self.get_add_action()
         self.actions.append(Action(self.get_absolute_editor_url(), 'Edit %s' % self.class_verbose_name))
         self.actions.append(Action(self.get_delete_entry_url(), 'Delete %s' % self.class_verbose_name))
         return self.actions
