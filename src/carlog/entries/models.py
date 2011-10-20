@@ -168,7 +168,7 @@ class CarTreatmentEntry(models.Model, IEntry):
     kilometrage = models.IntegerField(help_text = 'If a future treatment, then the planned kilometrage to take the car to the mechanic')
     cost = models.IntegerField()
     
-    class_verbose_name = 'car-treatment'
+    class_verbose_name = 'treatment'
     
     class Meta:
         verbose_name_plural = 'Car treatment entries'
@@ -178,4 +178,8 @@ class CarTreatmentEntry(models.Model, IEntry):
     
     def formatted_date(self):
         return self.date.strftime('%b/%d/%Y')
+    
+class CarTreatmentEntryForm(ModelForm):
+    class Meta:
+        model = CarTreatmentEntry
 

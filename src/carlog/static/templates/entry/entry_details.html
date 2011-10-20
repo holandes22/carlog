@@ -22,6 +22,8 @@
 {% endblock %}
 {% block action_pane_content %}
 	{% for available_action in available_actions %}
+	<div>
 		<button onclick="$('#editor_dialog').load('{{ available_action.action_url }}').dialog('open');">{{ available_action.action_name }}</button>
+	</div>	
 	{% endfor %}
 {% endblock %}

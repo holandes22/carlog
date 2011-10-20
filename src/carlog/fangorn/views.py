@@ -1,7 +1,8 @@
 import json
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from carlog.fangorn.models import DynatreeNode
-from carlog.entries.models import Car, CarMechanic
+from carlog.entries.models import Car, CarMechanic, CarTreatmentEntry
 
 #This is the root tree
 tree_data = [
@@ -48,10 +49,8 @@ def get_car_tree_nodes(request):
         
         node_child = DynatreeNode()
         node_child.node_attrs['title'] = "Treatments"
-        node_child.node_attrs['lazy_loading_url'] = "/tree/get_treatment_tree_nodes/%s/" % (car.id)
-        node_child.node_attrs['url'] = "/entries/car/%s/treatment/index/" % (car.id)
+        node_child.node_attrs['url'] = "/entries/treatment/car/%s/summary/" % (car.id)
         node_child.node_attrs['isFolder'] = False
-        node_child.node_attrs['isLazy'] = True
         node.node_attrs['children'] = [node_child.node_attrs]    
         
         children.append(node.node_attrs)
@@ -66,4 +65,4 @@ def get_mechanic_tree_nodes(request):
         node.node_attrs['url'] = "%s/details/"% (mechanic.get_absolute_url())
         node.node_attrs['isFolder'] = False
         children.append(node.node_attrs)
-    return HttpResponse(json.dumps(children))
+    return HttpResponse(json.dumps(children))    

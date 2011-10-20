@@ -7,7 +7,7 @@ from django.contrib import auth
 
 from carlog.entries.models import Car, CarForm
 from carlog.entries.models import CarMechanic, CarMechanicForm
-from carlog.entries.models import CarTreatmentEntry
+from carlog.entries.models import CarTreatmentEntry, CarTreatmentEntryForm
 
 
 #=======================================================================================================================
@@ -105,5 +105,39 @@ def treatment_index(request, id):
     filters = 'CarMechanic %s' % (car,) 
     return render_to_response('treatment/treatment_index.html', {'treatment_list': treatment_list, 'filters': filters}, 
                               context_instance = RequestContext(request))
+
+
+@login_required()
+def treatment_summary(request, car_id):
+    car = get_object_or_404(Car, id = car_id)
+    treatment_list = CarTreatmentEntry.objects.filter(car = car)
+    available_actions = [treatment_list[0].get_common_actions()[0]]
+    return render_to_response('entry/entry_summary.html', 
+                              {'entry_list': treatment_list, 'user': request.user,'available_actions':available_actions}, 
+                              context_instance = RequestContext(request))
+
+@login_required() 
+def treatment_details(request, id):
+    treatment = get_object_or_404(CarTreatmentEntry, id = id)
+    available_actions = treatment.get_common_actions()
+    return render_to_response('entry/entry_details.html',
+                              {'entry': treatment, 'user': request.user, 'available_actions':available_actions}, 
+                              context_instance = RequestContext(request))
     
+@login_required()  
+def treatment_editor(request, id = None):
+    try:
+        treatment = CarTreatmentEntry.objects.get(pk = id)
+    except ObjectDoesNotExist:
+        mechanic = None
+    form = CarTreatmentEntryForm(request.POST or None, instance = treatment)
+    
+    #Save new/edited System
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return HttpResponse('saved')
+    
+    submit_url = mechanic and mechanic.get_absolute_editor_url() or CarMechanic.get_model_editor_url()
+    return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
+                              context_instance = RequestContext(request))
 
