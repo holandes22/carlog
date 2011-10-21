@@ -17,7 +17,22 @@ from carlog.entries.models import CarTreatmentEntry, CarTreatmentEntryForm
 def mobile_test(request):
     car_list = CarMechanic.objects.filter(user = request.user)
     return render_to_response('mobile_test.html', {'car_list': car_list, 'user': request.user},
-                              context_instance = RequestContext(request))    
+                              context_instance = RequestContext(request))   
+    
+#=======================================================================================================================
+# Generic Methods 
+#=======================================================================================================================
+
+def generic_entry_summary(request, entry_list, available_actions):
+    return render_to_response('entry/entry_summary.html', 
+                              {'user': request.user, 'entry_list': entry_list, 'available_actions':available_actions}, 
+                              context_instance = RequestContext(request))
+    
+def generic_entry_details(request, entry, available_actions):
+    return render_to_response('entry/entry_details.html',
+                              {'entry': entry, 'user': request.user, 'available_actions':available_actions}, 
+                              context_instance = RequestContext(request))
+    
 #=======================================================================================================================
 # CarMechanic Methods
 #=======================================================================================================================
@@ -25,17 +40,12 @@ def mobile_test(request):
 @login_required()
 def car_summary(request):
     car_list = Car.objects.filter(user = request.user)
-    return render_to_response('entry/entry_summary.html', 
-                              {'entry_list': car_list, 'user': request.user,'available_actions':Car.get_add_action()}, 
-                              context_instance = RequestContext(request))
+    return generic_entry_summary(request, car_list, Car.get_add_action())
 
 @login_required() 
 def car_details(request, id):
     car = get_object_or_404(Car, id = id)
-    available_actions = car.get_common_actions()
-    return render_to_response('entry/entry_details.html',
-                              {'entry': car, 'user': request.user, 'available_actions':available_actions}, 
-                              context_instance = RequestContext(request))
+    return generic_entry_details(request, car, car.get_common_actions())
 
 @login_required()  
 def car_editor(request, id = None):
@@ -61,20 +71,12 @@ def car_editor(request, id = None):
 @login_required()
 def mechanic_summary(request):
     mechanic_list = CarMechanic.objects.filter(user = request.user)
-    return render_to_response('entry/entry_summary.html', 
-                              {
-                               'entry_list': mechanic_list, 'user': request.user,
-                               'available_actions':CarMechanic.get_add_action()
-                               }, 
-                              context_instance = RequestContext(request))
+    return generic_entry_summary(request, mechanic_list, CarMechanic.get_add_action())
 
 @login_required() 
 def mechanic_details(request, id):
     mechanic = get_object_or_404(CarMechanic, id = id)
-    available_actions = mechanic.get_common_actions()
-    return render_to_response('entry/entry_details.html',
-                              {'entry': mechanic, 'user': request.user, 'available_actions':available_actions}, 
-                              context_instance = RequestContext(request))
+    return generic_entry_details(request, mechanic, mechanic.get_common_actions())
     
 @login_required()  
 def mechanic_editor(request, id = None):
@@ -101,20 +103,12 @@ def mechanic_editor(request, id = None):
 def treatment_summary(request, car_id):
     car = get_object_or_404(Car, id = car_id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
-    return render_to_response('entry/entry_summary.html', 
-                              {
-                               'entry_list': treatment_list, 'user': request.user,
-                               'available_actions':CarTreatmentEntry.get_add_action()
-                               }, 
-                              context_instance = RequestContext(request))
+    return generic_entry_summary(request, treatment_list, CarTreatmentEntry.get_add_action())
 
 @login_required() 
 def treatment_details(request, id):
     treatment = get_object_or_404(CarTreatmentEntry, id = id)
-    available_actions = treatment.get_common_actions()
-    return render_to_response('entry/entry_details.html',
-                              {'entry': treatment, 'user': request.user, 'available_actions':available_actions}, 
-                              context_instance = RequestContext(request))
+    return generic_entry_details(request, treatment, treatment.get_common_actions())
     
 @login_required()  
 def treatment_editor(request, id = None):

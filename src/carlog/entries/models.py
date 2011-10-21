@@ -185,4 +185,4 @@ class CarTreatmentEntry(models.Model, IEntry):
 class CarTreatmentEntryForm(ModelForm):
     class Meta:
         model = CarTreatmentEntry
-
+        
