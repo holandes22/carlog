@@ -20,6 +20,7 @@ class IEntry(object):
     Must be set by the Entry model to work out the urls.
     """
     actions = None
+    
         
     def get_model_attrs(self, filter = 'id'):
         for field in self._meta.fields:
@@ -172,6 +173,7 @@ class CarTreatmentEntry(models.Model, IEntry):
     cost = models.IntegerField()
     
     class_verbose_name = 'treatment'
+    entry_name_plural = 'treatments'
     
     class Meta:
         verbose_name_plural = 'Car treatment entries'

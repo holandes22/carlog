@@ -1,0 +1,56 @@
+{% extends "content_base.html" %}
+{% load carlog_extras %}
+{% block extra_js %}
+<script type="text/javascript">
+$(function(){ 
+  $("#list").jqGrid({
+    url:'{{ grid_url }}',
+    datatype: 'xml',
+    mtype: 'GET',
+    colNames:[
+    		 	{% for key, value in entry_list.0.get_model_attrs %}'{{ key|replace_under_with:" "|capfirst }}',{% endfor %}
+    		 	'Edit',
+    		 	'Remove',
+    		 
+    		 ],
+    colModel :[ 
+    			{% for key, value in entry_list.0.get_model_attrs %}
+    			{name:'{{ key }}', index:'{{ key }}', width: 90}, 
+    			{% endfor %}
+    			{name:'edit', formatter:'link',},
+    			{name:'remove',formatter:'link',},
+    		  ],
+    pager: '#pager',
+    rowNum:10,
+    rowList:[10,20,30],
+    sortname: 'invid',
+    sortorder: 'desc',
+    viewrecords: true,
+    gridview: true,
+    caption: 'Treatments'
+  }); 
+}); 
+</script>
+{% endblock %}
+{% block body %}
+	<table id="list" width="70%"><tr><td/></tr></table> 
+	<div id="pager"></div> 
+
+	<h3>
+		{% if entry_list|length == 1 %}
+		    There is one {{ entry_list.0.get_entry_name }} registered for user {{ user }}.
+		{% else %}
+		    There are {{ entry_list|length }} {{ entry_list.0.get_entry_name_plural }} registered for user {{ user }}.
+		{% endif %}
+	</h3>
+	{% for entry in entry_list %}
+	<ul>
+		<li>{{ entry.get_full_name }}</li>
+	</ul>
+	{% endfor %}			
+{% endblock %}
+{% block action_pane_content %}
+	{% for available_action in available_actions %}
+		<button onclick="$('#editor_dialog').load('{{ available_action.action_url }}').dialog('open');">{{ available_action.action_name }}</button>
+	{% endfor %}
+{% endblock %}

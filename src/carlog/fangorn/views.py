@@ -51,7 +51,7 @@ def get_car_tree_nodes(request):
         node_child.node_attrs['title'] = "Treatments"
         node_child.node_attrs['url'] = "/entries/treatment/car/%s/summary/" % (car.id)
         node_child.node_attrs['isFolder'] = False
-        node.node_attrs['children'] = [node_child.node_attrs]    
+        node.node_attrs['children'] = [node_child.node_attrs]
         
         children.append(node.node_attrs)
     return HttpResponse(json.dumps(children))

@@ -1,3 +1,5 @@
+from types import MethodType
+
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.context import RequestContext
@@ -103,12 +105,42 @@ def mechanic_editor(request, id = None):
 def treatment_summary(request, car_id):
     car = get_object_or_404(Car, id = car_id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
-    return generic_entry_summary(request, treatment_list, CarTreatmentEntry.get_add_action())
+    return render_to_response('treatment/treatment_summary.html', 
+                              {
+                               'user': request.user, 
+                               'entry_list': treatment_list, 
+                               'available_actions': CarTreatmentEntry.get_add_action(),
+                               'grid_url': '/entries/treatment/car/%s/summary/get_grid/' % car.id,
+                               }, 
+                              context_instance = RequestContext(request))    
 
 @login_required() 
 def treatment_details(request, id):
     treatment = get_object_or_404(CarTreatmentEntry, id = id)
     return generic_entry_details(request, treatment, treatment.get_common_actions())
+
+def get_treatment_grid(request, car_id):
+    car = get_object_or_404(Car, id = car_id)
+    treatment_list = CarTreatmentEntry.objects.filter(car = car)
+
+    data = "<?xml version='1.0' encoding='utf-8'?>"
+    data += "<rows>"
+    data += "<page>%s</page>" % 1
+    data += "<total>%d</total>" % (len(treatment_list) / 10)
+    data += "<records>%d</records>" % len(treatment_list)
+    for treatment in treatment_list:
+        data += "<row id='%s'>" % treatment.id
+        for key, value in treatment.get_model_attrs():
+            if isinstance(value, MethodType):
+                value = value()
+            data += "<cell>%s</cell>" % value
+        data += "<cell>%s</cell>" % treatment.get_absolute_editor_url()
+        data += "<cell>%s</cell>" % treatment.get_delete_entry_url()
+        data += "</row>"
+    data += "</rows>"
+    
+    return HttpResponse(data, content_type = "text/xml;charset=utf-8")
+
     
 @login_required()  
 def treatment_editor(request, id = None):
