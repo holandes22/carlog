@@ -6,11 +6,21 @@ function resizeMainWindow() {
 	});
 }
 
+function resizeTreatmentDetailsGridSize(){
+	var ww = $(window).width();
+  	var wh = $(window).height();
+	$("#treatment_details_grid").setGridWidth($(window).width() - 450, true);
+	$("#treatment_details_grid").setGridHeight($(window).height() - 200, true);  	  	
+	
+	
+}
+
 
 $(document).ready(function() {
 	$(window).bind('resize', function() {
 		resizeMainWindow();
 	});
 	resizeMainWindow();
+	resizeTreatmentDetailsGridSize();
 });
 

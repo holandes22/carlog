@@ -119,7 +119,7 @@ def treatment_details(request, id):
     treatment = get_object_or_404(CarTreatmentEntry, id = id)
     return generic_entry_details(request, treatment, treatment.get_common_actions())
 
-def get_treatment_grid(request, car_id):
+def get_car_treatment_data_as_xml_string(car_id):
     car = get_object_or_404(Car, id = car_id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
 
@@ -139,6 +139,10 @@ def get_treatment_grid(request, car_id):
         data += "</row>"
     data += "</rows>"
     
+    return data    
+
+def get_treatment_grid(request, car_id):
+    data = get_car_treatment_data_as_xml_string(car_id)
     return HttpResponse(data, content_type = "text/xml;charset=utf-8")
 
     

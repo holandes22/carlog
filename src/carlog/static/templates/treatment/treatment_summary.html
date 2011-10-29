@@ -2,8 +2,11 @@
 {% load carlog_extras %}
 {% block extra_js %}
 <script type="text/javascript">
-$(function(){ 
-  $("#list").jqGrid({
+$(function(){
+	
+
+  var xml_datastr =  "{{ datastr }}";
+  $("#treatment_details_grid").jqGrid({
     url:'{{ grid_url }}',
     datatype: 'xml',
     mtype: 'GET',
@@ -15,27 +18,31 @@ $(function(){
     		 ],
     colModel :[ 
     			{% for key, value in entry_list.0.get_model_attrs %}
-    			{name:'{{ key }}', index:'{{ key }}', width: 90}, 
+    			{name:'{{ key }}', index:'{{ key }}', width: 90, shrinkToFit: true,}, 
     			{% endfor %}
-    			{name:'edit', formatter:'link',},
-    			{name:'remove',formatter:'link',},
+    			{name:'edit', formatter:'link', width: 80},
+    			{name:'remove',formatter:'link', width: 90},
     		  ],
-    pager: '#pager',
+    pager: '#treatment_details_grid_pager',
     rowNum:10,
     rowList:[10,20,30],
     sortname: 'invid',
     sortorder: 'desc',
     viewrecords: true,
     gridview: true,
-    caption: 'Treatments'
-  }); 
+    caption: 'Treatments',
+    autowidth: true,
+	autoheigth: true,
+  });
+  //setTreatmentDetailsGridSize()
 }); 
 </script>
 {% endblock %}
 {% block body %}
-	<table id="list" width="70%"><tr><td/></tr></table> 
-	<div id="pager"></div> 
-
+	{% if entry_list|length > 0 %}
+		<table id="treatment_details_grid"><tr><td/></tr></table> 
+		<div id="treatment_details_grid_pager"></div>
+	{% endif %}
 	<h3>
 		{% if entry_list|length == 1 %}
 		    There is one {{ entry_list.0.get_entry_name }} registered for user {{ user }}.

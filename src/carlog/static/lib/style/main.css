@@ -3,10 +3,6 @@
 	min-width:500px;
 }
 
-.action_pane_width {
-	min-width: 320px;
-    width: 320px;
-}
 /* 
 *Arbitrary values set at start, final values are 
 *set based on the height of the windows by jscript
