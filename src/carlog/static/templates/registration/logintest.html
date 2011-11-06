@@ -3,12 +3,20 @@
 
 {% if not request.user.is_authenticated %}
 	<h1>django-socialregistration login</h2>
+	<ul>
+	{% load facebook %}
+	<li>{% facebook_button %}</li>
+	{% load twitter %}
+	<li>{% twitter_button %}</li>
+</ul>
 {% else %}
 	<h1>Hi, {{ request.user }}</h1>
 {% endif %}
 
-{% load facebook %}
-<li>{% facebook_button %}</li>
+
+
+
+
 
 
 <h4>Connected profiles:</h4>

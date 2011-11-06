@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'socialregistration',
     'socialregistration.contrib.facebook',
+    'socialregistration.contrib.twitter',
     'carlog.fangorn',
     'carlog.entries',
 )
@@ -139,6 +140,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',
         'socialregistration.contrib.facebook.auth.FacebookAuth',
+        'socialregistration.contrib.twitter.auth.TwitterAuth',
 )
 
 #LOGIN_URL          = '/accounts/login/'
@@ -148,6 +150,9 @@ LOGIN_REDIRECT_URL = '/'
 FACEBOOK_APP_ID = '298823853479572'
 FACEBOOK_SECRET_KEY = 'ae44fc452df4c392d224f7f6ad4ed5f7'
 FOURSQUARE_REQUEST_PERMISSIONS = ''
+
+TWITTER_CONSUMER_KEY = 'MQW7d3rfHcey3TKK7Ajdw'
+TWITTER_CONSUMER_SECRET_KEY = 'NQnsklJyOE2XyrOfhNq2yrsU7ZnORBs3sc7DpiYnV7k'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
