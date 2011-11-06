@@ -96,9 +96,6 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-LOGIN_URL          = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGIN_ERROR_URL    = '/accounts/login/'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -125,9 +122,38 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'socialregistration',
+    'socialregistration.contrib.facebook',
+    'socialregistration.contrib.twitter',
     'carlog.fangorn',
     'carlog.entries',
 )
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
+)
+
+AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+        'socialregistration.contrib.facebook.auth.FacebookAuth',
+        'socialregistration.contrib.twitter.auth.TwitterAuth',
+)
+
+#LOGIN_URL          = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+#LOGIN_ERROR_URL    = '/accounts/login/'
+
+FACEBOOK_APP_ID = '298823853479572'
+FACEBOOK_SECRET_KEY = 'ae44fc452df4c392d224f7f6ad4ed5f7'
+FOURSQUARE_REQUEST_PERMISSIONS = ''
+
+TWITTER_CONSUMER_KEY = 'MQW7d3rfHcey3TKK7Ajdw'
+TWITTER_CONSUMER_SECRET_KEY = 'NQnsklJyOE2XyrOfhNq2yrsU7ZnORBs3sc7DpiYnV7k'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
