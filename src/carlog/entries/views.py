@@ -122,6 +122,9 @@ def treatment_details(request, id):
 def get_car_treatment_data_as_xml_string(car_id):
     car = get_object_or_404(Car, id = car_id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
+    
+    editor_button_html = """<cell><![CDATA[<button onclick="$('#editor_dialog').load('%s').dialog('open');">Edit</button>]]></cell>"""
+    delete_button_html = """<cell><![CDATA[<button onclick="alert('Delete url is %s')">Delete</button>]]></cell>"""
 
     data = "<?xml version='1.0' encoding='utf-8'?>"
     data += "<rows>"
@@ -134,8 +137,8 @@ def get_car_treatment_data_as_xml_string(car_id):
             if isinstance(value, MethodType):
                 value = value()
             data += "<cell>%s</cell>" % value
-        data += "<cell>%s</cell>" % treatment.get_absolute_editor_url()
-        data += "<cell>%s</cell>" % treatment.get_delete_entry_url()
+        data += editor_button_html % treatment.get_absolute_editor_url()
+        data += delete_button_html % treatment.get_delete_entry_url()
         data += "</row>"
     data += "</rows>"
     
