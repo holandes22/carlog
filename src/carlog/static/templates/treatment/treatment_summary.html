@@ -20,8 +20,8 @@ $(function(){
     			{% for key, value in entry_list.0.get_model_attrs %}
     			{name:'{{ key }}', index:'{{ key }}', width: 90, shrinkToFit: true,}, 
     			{% endfor %}
-    			{name:'edit', index:'edit', width: 80},
-    			{name:'remove',index:'edit', width: 90},
+    			{name:'edit', index:'edit', width: 50, align:'center'},
+    			{name:'remove',index:'edit', width: 50,align:'center'},
     		  ],
     pager: '#treatment_details_grid_pager',
     rowNum:10,

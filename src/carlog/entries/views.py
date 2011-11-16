@@ -1,5 +1,6 @@
 from types import MethodType
 
+from carlog.settings import STATIC_URL
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.context import RequestContext
@@ -16,6 +17,7 @@ from carlog.entries.models import CarTreatmentEntry, CarTreatmentEntryForm
 # Test Methods
 #=======================================================================================================================
 
+@login_required()
 def mobile_test(request):
     car_list = CarMechanic.objects.filter(user = request.user)
     return render_to_response('mobile_test.html', {'car_list': car_list, 'user': request.user},
@@ -119,12 +121,13 @@ def treatment_details(request, id):
     treatment = get_object_or_404(CarTreatmentEntry, id = id)
     return generic_entry_details(request, treatment, treatment.get_common_actions())
 
+@login_required()
 def get_car_treatment_data_as_xml_string(car_id):
     car = get_object_or_404(Car, id = car_id)
     treatment_list = CarTreatmentEntry.objects.filter(car = car)
     
-    editor_button_html = """<cell><![CDATA[<button onclick="$('#editor_dialog').load('%s').dialog('open');">Edit</button>]]></cell>"""
-    delete_button_html = """<cell><![CDATA[<button onclick="alert('Delete url is %s')">Delete</button>]]></cell>"""
+    editor_button_html = """<cell><![CDATA[<button onclick="$('#editor_dialog').load('%s').dialog('open');"><img src='%s'/></button>]]></cell>"""
+    delete_button_html = """<cell><![CDATA[<button onclick="alert('Delete url is %s')"><img src='%s'/></button>]]></cell>"""
 
     data = "<?xml version='1.0' encoding='utf-8'?>"
     data += "<rows>"
@@ -137,13 +140,14 @@ def get_car_treatment_data_as_xml_string(car_id):
             if isinstance(value, MethodType):
                 value = value()
             data += "<cell>%s</cell>" % value
-        data += editor_button_html % treatment.get_absolute_editor_url()
-        data += delete_button_html % treatment.get_delete_entry_url()
+        data += editor_button_html % (treatment.get_absolute_editor_url(), "%s/lib/pics/edit_16x16.png" % STATIC_URL)
+        data += delete_button_html % (treatment.get_delete_entry_url(), "%s/lib/pics/delete_16x16.png" % STATIC_URL)
         data += "</row>"
     data += "</rows>"
     
     return data    
 
+@login_required()
 def get_treatment_grid(request, car_id):
     data = get_car_treatment_data_as_xml_string(car_id)
     return HttpResponse(data, content_type = "text/xml;charset=utf-8")
