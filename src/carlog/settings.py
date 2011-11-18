@@ -144,9 +144,9 @@ AUTHENTICATION_BACKENDS = (
         'socialregistration.contrib.twitter.auth.TwitterAuth',
 )
 
-#LOGIN_URL          = '/accounts/login/'
+LOGIN_URL          = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-#LOGIN_ERROR_URL    = '/accounts/login/'
+LOGIN_ERROR_URL    = '/accounts/login/'
 
 FACEBOOK_APP_ID = '298823853479572'
 FACEBOOK_SECRET_KEY = 'ae44fc452df4c392d224f7f6ad4ed5f7'
