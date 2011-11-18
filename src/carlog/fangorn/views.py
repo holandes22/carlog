@@ -9,7 +9,7 @@ from carlog.entries.models import Car, CarMechanic
 tree_data = [
     {"title": "Search", "key": "search_node", "url": "/search/", "icon":"search.png"},
     {"title": "Account creation", "key": "auth_node", "url": "/accounts/auth/", "icon":"users.png"},
-    {"title": "Account", "key": "account_node", "url": "/accounts/login/", "icon":"user.png"},
+    {"title": "Account", "key": "account_node", "url": "/accounts/login-page/", "icon":"user.png"},
     {
      "title": "Cars", 
      "isFolder": True, 

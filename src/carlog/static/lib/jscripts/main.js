@@ -13,13 +13,13 @@ function resizeTreatmentDetailsGridSize(){
 	$("#treatment_details_grid").setGridHeight($(window).height() - 200, true);  	  	
 }
 
-function genericLoadDialog(form_selector, dialog_selector, onSuccessHandler){
+function genericLoadDialog(form_selector, dialog_selector, onSuccessHandler, matchString){
 	$.ajax({
 		url: $(form_selector).attr('action'),
 		type: 'POST',
 		data:  $(form_selector).serialize(),
 		success: function(data, textStatus, jqXHR){
-			if(data == 'saved'){
+			if(data.match(matchString)){
 				$(dialog_selector).dialog('close');
 				if(onSuccessHandler && typeof onSuccessHandler == 'function'){
 					onSuccessHandler();
@@ -41,18 +41,12 @@ $(document).ready(function() {
 	resizeMainWindow();
 	resizeTreatmentDetailsGridSize();
 	
-	$( "#login_dialog" ).dialog(
-		{
-			autoOpen: false,
-		}
-	);
-	
 	$( "#editor_dialog" ).dialog({
 		autoOpen: false,
 		width: 'auto',
 		buttons: {
 			Save: function() {
-				genericLoadDialog("#editor_form", this, reactivateCurrentTreeNode);	
+				genericLoadDialog("#editor_form", this, reactivateCurrentTreeNode, "saved");	
 			},
 			Cancel: function() {
 				$( this ).dialog( "close" );

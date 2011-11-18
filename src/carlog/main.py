@@ -7,6 +7,9 @@ from socialregistration.contrib.facebook.models import FacebookProfile
 def carlog_main(request):
     return render_to_response('base.html', context_instance = RequestContext(request))
 
+def login_page(request):
+    return render_to_response('registration/login_page.html', context_instance = RequestContext(request))
+
 def search_page(request):
     return render_to_response('search/search.html', context_instance = RequestContext(request))
 

@@ -144,7 +144,7 @@ AUTHENTICATION_BACKENDS = (
         'socialregistration.contrib.twitter.auth.TwitterAuth',
 )
 
-LOGIN_URL          = '/accounts/login/'
+LOGIN_URL          = '/accounts/login-page/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/accounts/login/'
 
