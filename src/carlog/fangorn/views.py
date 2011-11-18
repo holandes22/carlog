@@ -1,8 +1,9 @@
 import json
-from django.shortcuts import get_object_or_404
+
 from django.http import HttpResponse
+
 from carlog.fangorn.models import DynatreeNode
-from carlog.entries.models import Car, CarMechanic, CarTreatmentEntry
+from carlog.entries.models import Car, CarMechanic
 
 #This is the root tree
 tree_data = [
@@ -41,30 +42,32 @@ def get_tree_nodes(request):
 
 def get_car_tree_nodes(request):
     children = []
-    cars = Car.objects.all()
-    for car in cars:
-        node = DynatreeNode()
-        node.node_attrs['title'] = car.get_full_name()
-        node.node_attrs['url'] = "%s/details/"% (car.get_absolute_url())
-        node.node_attrs['isFolder'] = True
-        
-        node_child = DynatreeNode()
-        node_child.node_attrs['title'] = "Treatments"
-        node_child.node_attrs['url'] = "/entries/treatment/car/%s/summary/" % (car.id)
-        node_child.node_attrs['isFolder'] = False
-        node_child.node_attrs['icon'] = "wrench.png"
-        node.node_attrs['children'] = [node_child.node_attrs]
-        
-        children.append(node.node_attrs)
+    if not request.user.is_anonymous():
+        cars = Car.objects.filter(user = request.user)
+        for car in cars:
+            node = DynatreeNode()
+            node.node_attrs['title'] = car.get_full_name()
+            node.node_attrs['url'] = "%s/details/"% (car.get_absolute_url())
+            node.node_attrs['isFolder'] = True
+            
+            node_child = DynatreeNode()
+            node_child.node_attrs['title'] = "Treatments"
+            node_child.node_attrs['url'] = "/entries/treatment/car/%s/summary/" % (car.id)
+            node_child.node_attrs['isFolder'] = False
+            node_child.node_attrs['icon'] = "wrench.png"
+            node.node_attrs['children'] = [node_child.node_attrs]
+            
+            children.append(node.node_attrs)
     return HttpResponse(json.dumps(children))
 
 def get_mechanic_tree_nodes(request):
     children = []
-    mechanics = CarMechanic.objects.all()
-    for mechanic in mechanics:
-        node = DynatreeNode()
-        node.node_attrs['title'] = mechanic.get_full_name()
-        node.node_attrs['url'] = "%s/details/"% (mechanic.get_absolute_url())
-        node.node_attrs['isFolder'] = False
-        children.append(node.node_attrs)
+    if not request.user.is_anonymous():
+        mechanics = CarMechanic.objects.filter(user = request.user)
+        for mechanic in mechanics:
+            node = DynatreeNode()
+            node.node_attrs['title'] = mechanic.get_full_name()
+            node.node_attrs['url'] = "%s/details/"% (mechanic.get_absolute_url())
+            node.node_attrs['isFolder'] = False
+            children.append(node.node_attrs)
     return HttpResponse(json.dumps(children))    
