@@ -1,7 +1,8 @@
 {% load url from future %}
 
 {% if user.is_authenticated %}
-<div>Logged in</div>
+<div>Already logged in</div>
+<a href="/accounts/logout/">Log out</a>
 
 {% else %}
 
@@ -28,4 +29,6 @@
 	</form>
 
 {% endif %}
+
+
 
