@@ -1,1 +1,8 @@
-Django>=1.3
+Django>=1.3.1
+oauth2
+python-openid
+nose
+mock==dev
+ipython
+-e git+https://github.com/flashingpumpkin/django-socialregistration.git#egg=django-socialregistration
+-e git+https://github.com/facebook/python-sdk.git#egg=FacebookSDK
