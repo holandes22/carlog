@@ -1,13 +1,14 @@
 from types import MethodType
 
-from carlog.settings import STATIC_URL
-from django.shortcuts import render_to_response, get_object_or_404, redirect
-from django.core.exceptions import ObjectDoesNotExist
+
+from django.contrib import auth
 from django.template.context import RequestContext
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.contrib import auth
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 
+from carlog.settings import STATIC_URL
 from carlog.entries.models import Car, CarForm
 from carlog.entries.models import CarMechanic, CarMechanicForm
 from carlog.entries.models import CarTreatmentEntry, CarTreatmentEntryForm
@@ -61,7 +62,7 @@ def car_editor(request, id = None):
     
     #Save new/edited System
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        form.save(user = request.user)
         return HttpResponse('saved')
     
     submit_url = car and car.get_absolute_editor_url() or Car.get_model_editor_url()
@@ -92,7 +93,7 @@ def mechanic_editor(request, id = None):
     
     #Save new/edited System
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        form.save(user = request.user)
         return HttpResponse('saved')
     
     submit_url = mechanic and mechanic.get_absolute_editor_url() or CarMechanic.get_model_editor_url()
@@ -158,7 +159,7 @@ def treatment_editor(request, id = None):
         treatment = CarTreatmentEntry.objects.get(pk = id)
     except ObjectDoesNotExist:
         treatment = None
-    form = CarTreatmentEntryForm(request.POST or None, instance = treatment)
+    form = CarTreatmentEntryForm(request.user, request.POST or None, instance = treatment)
     
     #Save new/edited System
     if request.method == 'POST' and form.is_valid():

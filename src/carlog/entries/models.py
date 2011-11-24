@@ -64,7 +64,7 @@ class IEntry(object):
         self.actions.append(Action(self.get_delete_entry_url(), 'Delete %s' % self.class_verbose_name))
         return self.actions
 
-        
+
 class Car(models.Model, IEntry):
     """
     Contains all the car details. The date fields refer to the purchase date.
@@ -106,7 +106,17 @@ class Car(models.Model, IEntry):
 class CarForm(ModelForm):
     class Meta:
         model = Car
+        readonly_fields = ['user']
+        exclude = ['user']
 
+    def save(self, commit = True, user = None):
+        model = super(CarForm, self).save(commit = False)
+        model.user = user
+ 
+        if commit:
+            model.save()
+        return model
+    
 class CarMechanic(models.Model, IEntry):
     """
     Contains information about a mechanic.
@@ -130,6 +140,16 @@ class CarMechanic(models.Model, IEntry):
 class CarMechanicForm(ModelForm):
     class Meta:
         model = CarMechanic
+        readonly_fields = ['user']
+        exclude = ['user']
+    
+    def save(self, commit = True, user = None):
+        model = super(CarMechanicForm, self).save(commit = False)
+        model.user = user
+ 
+        if commit:
+            model.save()
+        return model
     
    
     
@@ -187,4 +207,11 @@ class CarTreatmentEntry(models.Model, IEntry):
 class CarTreatmentEntryForm(ModelForm):
     class Meta:
         model = CarTreatmentEntry
+        readonly_fields = ['user']
+        exclude = ['user']
         
+    def __init__(self, user, *args, **kwargs):
+        super(CarTreatmentEntryForm, self).__init__(*args, **kwargs)
+        #Only show the fields related to this user
+        self.fields['car'].queryset = Car.objects.filter(user = user)
+        self.fields['mechanic'].queryset = CarMechanic.objects.filter(user = user)
