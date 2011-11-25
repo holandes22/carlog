@@ -167,6 +167,12 @@ def treatment_editor(request, id = None):
         return HttpResponse('saved')
     
     submit_url = treatment and treatment.get_absolute_editor_url() or CarTreatmentEntry.get_model_editor_url()
-    return render_to_response('editor.html', { 'form':form, 'submit_url': submit_url }, 
+    return render_to_response('editor.html', 
+                              { 
+                               'form':form, 
+                               'submit_url': submit_url,
+                               'mechanic_editor_url': CarMechanic.get_model_editor_url(),
+                               'car_editor_url': Car.get_model_editor_url(),
+                               }, 
                               context_instance = RequestContext(request))
 

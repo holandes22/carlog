@@ -5,9 +5,18 @@
     		<tr>
 				<td>{{ field.label_tag }}</td>
 				<td>{{ field }}</td>
+				<td>
+					{% if car_editor_url and field.name == "car" %}
+						<button type=button onclick="$('#editor_dialog').load('{{ car_editor_url }}').dialog('open');" title='Add Car'><img src='{{ STATIC_URL }}lib/pics/add_32x32.png' width="16" height="16" /></button>
+					{% endif %}
+					{% if mechanic_editor_url and field.name == "mechanic" %}
+						<button type=button onclick="$('#editor_dialog').load('{{ mechanic_editor_url }}').dialog('open');" title='Add Mechanic'><img src='{{ STATIC_URL }}lib/pics/add_32x32.png' width="16" height="16" /></button>
+					{% endif %}						
+				</td>
 				<td class='field_error'>{{ field.errors }}</td>
     		</tr>
     	</table>
     {% endfor %}
 </form>
+
 
