@@ -1,8 +1,18 @@
 import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
+DATE_FORMAT = '%m/%d/%Y'
+
+def make_custom_datefield(field):
+    """Adds a custom class to the field so it can be identified by Jquery UI datepicker in the template"""
+    formfield = field.formfield()
+    if isinstance(field, models.DateField):
+        formfield.widget.format = DATE_FORMAT
+        formfield.widget.attrs.update({'class':'datePicker', 'readonly':'true'})
+    return formfield
 
 class Action(object):
     
@@ -104,6 +114,7 @@ class Car(models.Model, IEntry):
         return self.hand == 0
     
 class CarForm(ModelForm):
+    formfield_callback = make_custom_datefield
     class Meta:
         model = Car
         readonly_fields = ['user']
@@ -138,6 +149,7 @@ class CarMechanic(models.Model, IEntry):
         return "%s %s" % (self.name, self.lastname)
     
 class CarMechanicForm(ModelForm):
+    formfield_callback = make_custom_datefield
     class Meta:
         model = CarMechanic
         readonly_fields = ['user']
@@ -184,9 +196,11 @@ class CarTreatmentEntry(models.Model, IEntry):
     car = models.ForeignKey(Car)
     mechanic = models.ForeignKey(CarMechanic)
     planned = models.BooleanField(default = False, help_text = 'Is this a treatment planned for the future?')
-    date = models.DateField(default = datetime.datetime.now, help_text = 'If a future treatment, then the planned date to take the car for treatment')
+    date = models.DateField(default = datetime.datetime.now, 
+                            help_text = 'If a future treatment, then the planned date to take the car for treatment')
     reason = models.IntegerField(choices = TREATMENT_REASONS, default = BROKEN_REASON)
-    parts_replaced = models.CharField(max_length = 300, default = 'None', help_text = 'Replaced parts during treatment, comma separated')
+    parts_replaced = models.CharField(max_length = 300, default = 'None', 
+                                      help_text = 'Replaced parts during treatment, comma separated')
     description = models.TextField()
     category = models.IntegerField(choices = TREATMENT_CATS, default = BODYWORK_CAT)
     kilometrage = models.IntegerField(help_text = 'If a future treatment, then the planned kilometrage to take the car to the mechanic')
@@ -205,6 +219,7 @@ class CarTreatmentEntry(models.Model, IEntry):
         return self.date.strftime('%b/%d/%Y')
     
 class CarTreatmentEntryForm(ModelForm):
+    formfield_callback = make_custom_datefield
     class Meta:
         model = CarTreatmentEntry
         readonly_fields = ['user']

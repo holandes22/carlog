@@ -8,4 +8,4 @@ def replace_under_with(value, arg):
 
 @register.filter()
 def field_type(field):
-    return field.field.type.__class__.name 
+    return field.field.__class__.__name__ 

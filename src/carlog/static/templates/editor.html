@@ -1,7 +1,10 @@
-{% load carlog_extras %}
 <html>
 	<head>
-		
+		<script>
+			$(function() {
+				$( ".datePicker" ).datepicker();
+			});
+		</script>
 	</head>
 	<body>
 		<form id="editor_form" action={{ submit_url }} method="POST">

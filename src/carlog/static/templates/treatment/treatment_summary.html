@@ -3,8 +3,6 @@
 {% block extra_js %}
 <script type="text/javascript">
 $(function(){
-	
-
   var xml_datastr =  "{{ datastr }}";
   $("#treatment_details_grid").jqGrid({
     url:'{{ grid_url }}',
@@ -30,7 +28,11 @@ $(function(){
     sortorder: 'desc',
     viewrecords: true,
     gridview: true,
-    caption: 'Treatments',
+    caption:{% if entry_list|length == 1 %}
+    			'There is one treatment registered for user {{ user }}.'
+			{% else %}
+		    	'There are {{ entry_list|length }} treatments registered for user {{ user }}.'
+			{% endif %},
     autowidth: true,
 	autoheigth: true,
   });
@@ -39,22 +41,15 @@ $(function(){
 </script>
 {% endblock %}
 {% block body %}
+	<h3>
+		{% if entry_list|length == 0 %}
+			There are zero entries registered for user {{ user }}.
+		{% endif %}
+	</h3>
 	{% if entry_list|length > 0 %}
 		<table id="treatment_details_grid"><tr><td/></tr></table> 
 		<div id="treatment_details_grid_pager"></div>
-	{% endif %}
-	<h3>
-		{% if entry_list|length == 1 %}
-		    There is one {{ entry_list.0.get_entry_name }} registered for user {{ user }}.
-		{% else %}
-		    There are {{ entry_list|length }} {{ entry_list.0.get_entry_name_plural }} registered for user {{ user }}.
-		{% endif %}
-	</h3>
-	{% for entry in entry_list %}
-	<ul>
-		<li>{{ entry.get_full_name }}</li>
-	</ul>
-	{% endfor %}			
+	{% endif %}	
 {% endblock %}
 {% block action_pane_content %}
 	{% for available_action in available_actions %}
