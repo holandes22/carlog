@@ -20,8 +20,10 @@
 								{% endif %}
 								{% if mechanic_editor_url and field.name == "mechanic" %}
 									<button type=button onclick="$('#editor_dialog').load('{{ mechanic_editor_url }}').dialog('open');" title='Add Mechanic'><img src='{{ STATIC_URL }}lib/pics/add_32x32.png' width="16" height="16" /></button>
-								{% endif %}						
-							</td>
+								{% else %}
+									<div>&nbsp;</div>
+								{% endif %}
+							</td>						
 							<td class='field_error'>{{ field.errors }}</td>
 			    		</tr>
 			    {% endfor %}

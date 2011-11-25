@@ -44,6 +44,7 @@ $(document).ready(function() {
 	$( "#editor_dialog" ).dialog({
 		autoOpen: false,
 		width: 'auto',
+		resizable: false,
 		buttons: {
 			Save: function() {
 				genericLoadDialog("#editor_form", this, reactivateCurrentTreeNode, "saved");	
