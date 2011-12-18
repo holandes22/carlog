@@ -92,6 +92,9 @@ class Car(models.Model, IEntry):
                   (SPORT_TYPE, 'Sport'),
                   )
     
+    YEARS = [year for year in xrange(1920, datetime.datetime.now().year + 2)]
+    YEAR_CHOICES = zip(YEARS, map(lambda x: str(x), YEARS))
+
     brand = models.CharField(max_length = 100)
     model = models.CharField(max_length = 100)
     user = models.ForeignKey(User)
@@ -99,7 +102,7 @@ class Car(models.Model, IEntry):
     is_automatic = models.BooleanField(default = True)
     gears = models.IntegerField(default = 5)
     hand = models.IntegerField(default = 0, help_text = 'Number of previous owners when purchased')
-    year = models.DateField(help_text = 'Production year')
+    year = models.IntegerField(choices = YEAR_CHOICES, default = str(datetime.datetime.now().year))
     purchase_date = models.DateField(default = datetime.datetime.now, help_text = 'Purchase date')
     kilometrage = models.IntegerField(help_text = 'Kilometrage when purchased')
     color = models.CharField(max_length = 100)
@@ -108,7 +111,7 @@ class Car(models.Model, IEntry):
     entry_name_plural = 'cars'
     
     def __unicode__(self):
-        return '%s %s %s' % (self.brand, self.model, self.year.strftime('%Y'))
+        return '%s %s %s' % (self.brand, self.model, self.year)
     
     def was_new_when_bought(self):
         return self.hand == 0
