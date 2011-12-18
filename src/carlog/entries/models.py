@@ -6,9 +6,14 @@ from django.forms import ModelForm
 
 DATE_FORMAT = '%m/%d/%Y'
 
-def make_custom_datefield(field):
-    """Adds a custom class to the field so it can be identified by Jquery UI datepicker in the template"""
+def make_custom_field_callback(field):
+    """
+    Callback to make field customization. This is useful to midifiy the elements of a form, for example
+    a custom class to a date field so it can be identified by Jquery UI datepicker in the template
+    """
     formfield = field.formfield()
+    if formfield:
+        formfield.widget.attrs.update({'title': field.help_text})
     if isinstance(field, models.DateField):
         formfield.widget.format = DATE_FORMAT
         formfield.widget.attrs.update({'class':'datePicker', 'readonly':'true'})
@@ -117,7 +122,7 @@ class Car(models.Model, IEntry):
         return self.hand == 0
     
 class CarForm(ModelForm):
-    formfield_callback = make_custom_datefield
+    formfield_callback = make_custom_field_callback
     class Meta:
         model = Car
         readonly_fields = ['user']
@@ -152,7 +157,7 @@ class CarMechanic(models.Model, IEntry):
         return "%s %s" % (self.name, self.lastname)
     
 class CarMechanicForm(ModelForm):
-    formfield_callback = make_custom_datefield
+    formfield_callback = make_custom_field_callback
     class Meta:
         model = CarMechanic
         readonly_fields = ['user']
@@ -222,7 +227,7 @@ class CarTreatmentEntry(models.Model, IEntry):
         return self.date.strftime('%b/%d/%Y')
     
 class CarTreatmentEntryForm(ModelForm):
-    formfield_callback = make_custom_datefield
+    formfield_callback = make_custom_field_callback
     class Meta:
         model = CarTreatmentEntry
         readonly_fields = ['user']
