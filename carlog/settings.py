@@ -41,9 +41,9 @@ MEDIA_URL = ''
 
 STATIC_ROOT = ''
 
-STATIC_URL = os.path.join(APP_PARENT_DIR, 'static')
+STATIC_URL = '/static/'
 
-ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin/')
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 STATICFILES_DIRS = (STATIC_URL,
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'carlog.urls'
 
-TEMPLATE_DIRS = (os.path.join(APP_BASE_DIR, 'templates'),
+TEMPLATE_DIRS = (os.path.join('carlog', 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
