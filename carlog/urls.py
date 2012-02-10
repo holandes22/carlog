@@ -8,10 +8,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 if DEBUG is False:
-    urlpatterns = patterns(url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),)
+    urlpatterns = patterns('', url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),)
 
 
-urlpatterns += patterns('',
+urlpatterns += patterns(
     url(r'^search/$', search_page),
     url(r'^social/', include('socialregistration.urls', namespace = 'socialregistration')),
     url(r'^accounts/auth/$', auth_page),
@@ -23,6 +23,5 @@ urlpatterns += patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', carlog_main),
-    
 )
 
