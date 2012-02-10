@@ -8,7 +8,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^static/(?P.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),
+    url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),
     url(r'^search/$', search_page),
     url(r'^social/', include('socialregistration.urls', namespace = 'socialregistration')),
     url(r'^accounts/auth/$', auth_page),
