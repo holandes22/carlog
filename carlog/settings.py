@@ -47,7 +47,7 @@ STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 STATICFILES_DIRS = (
-                    os.path.join(APP_BASE_DIR, 'static'),
+                    os.path.join(APP_PARENT_DIR, 'static'),
                     )
 
 STATICFILES_FINDERS = (
