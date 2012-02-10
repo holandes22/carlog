@@ -55,6 +55,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+#    'compressor.finders.CompressorFinder',
 )
 
 SECRET_KEY = '%&nlm&53x!xw()oq-to%y_krr-n$_j9w3c8nu4b935axmljixo'
@@ -95,6 +96,7 @@ INSTALLED_APPS = (
     'socialregistration',
     'socialregistration.contrib.facebook',
     'socialregistration.contrib.twitter',
+    'gunicorn',
     'carlog.fangorn',
     'carlog.entries',
 )
