@@ -1,4 +1,4 @@
-from carlog.settings import STATIC_ROOT
+from carlog.settings import STATIC_ROOT, DEBUG
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib.auth.views import login, logout
 from carlog.main import carlog_main, search_page, auth_page, login_page
@@ -7,8 +7,8 @@ from carlog.main import carlog_main, search_page, auth_page, login_page
 from django.contrib import admin
 admin.autodiscover()
 
+
 urlpatterns = patterns('',
-    url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),
     url(r'^search/$', search_page),
     url(r'^social/', include('socialregistration.urls', namespace = 'socialregistration')),
     url(r'^accounts/auth/$', auth_page),
@@ -22,3 +22,6 @@ urlpatterns = patterns('',
     url(r'^$', carlog_main),
     
 )
+
+#if DEBUG is False:
+#    urlpatterns += patterns(url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),)
