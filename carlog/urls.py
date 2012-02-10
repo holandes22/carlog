@@ -23,5 +23,5 @@ urlpatterns = patterns('',
     
 )
 
-#if DEBUG is False:
-#    urlpatterns += patterns(url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),)
+if DEBUG is False:
+    urlpatterns += patterns(url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),)
