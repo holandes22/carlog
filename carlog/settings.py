@@ -2,7 +2,8 @@
 
 import os
 
-APP_BASE_DIR = os.path.abspath(os.path.dirname( globals()[ '__file__' ] )) 
+#APP_BASE_DIR = os.path.abspath(os.path.dirname( globals()[ '__file__' ] )) 
+APP_BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
 APP_PARENT_DIR = os.path.dirname(APP_BASE_DIR)
 
 DEBUG = False
