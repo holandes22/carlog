@@ -39,13 +39,13 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(APP_BASE_DIR, 'staticfiles')
 
-STATIC_URL = os.path.join(APP_PARENT_DIR, 'static/')
+STATIC_URL = '/static/'
 
-ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, 'admin/')
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-STATICFILES_DIRS = (STATIC_URL,
+STATICFILES_DIRS = (os.path.join(APP_PARENT_DIR, 'static/'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
