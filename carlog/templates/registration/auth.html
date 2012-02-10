@@ -1,26 +1,28 @@
-<html><head><title>Socialregistration example</title></head>
-<body>
-
-{% if not request.user.is_authenticated %}
-	<h1>django-socialregistration login</h2>
-	<ul>
-	{% load facebook %}
-	<li>{% facebook_button %}</li>
-	{% load twitter %}
-	<li>{% twitter_button %}</li>
-</ul>
-{% else %}
-	<h1>Hi, {{ request.user }}</h1>
-{% endif %}
-
-<h4>Connected profiles:</h4>
-
-<li>Facebook: {{ facebook.count }}</li>
-
-
-{% if request.user.is_authenticated %}
-	<a href="{% url socialregistration:logout %}">Logout</a>
-{% endif %}
-
-</body>
+<html>
+	<head>
+		<title>Account login</title>
+	</head>
+	<body>
+	{% if not request.user.is_authenticated %}
+		<h2>Authenticate</h2>
+		<p>
+			Currently, we only support automatic account creation and authentication
+			via Facebook or Twitter. We plan to introduce shortly authentication via
+			Gmail, github and via carlog internal mechanism.
+			When autheinticating for the first time, a carlog account will be created.
+			You will be able to choose a user name and an email to link to this account.
+		</p>
+		<ul>
+			{% load facebook %}
+			<li>{% facebook_button %}</li>
+			{% load twitter %}
+			<li>{% twitter_button %}</li>
+<!-- 			<li>Carlog account: <a href="/accounts/login">Go to login page</a></li> -->
+		</ul>
+		
+	{% else %}
+		<h1>Hi, {{ request.user }}</h1>
+		<a href="{% url socialregistration:logout %}">Logout</a>
+	{% endif %}
+	</body>
 </html>

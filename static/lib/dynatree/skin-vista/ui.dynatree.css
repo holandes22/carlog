@@ -11,8 +11,8 @@ ul.dynatree-container
 
 	background-color: transparent;
 /*	border: 1px dotted gray;*/
-
-	overflow: auto;
+    line-height: 1em; /* fixes website where the default line-height is altered */
+    overflow: auto;
 }
 
 ul.dynatree-container ul

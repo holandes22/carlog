@@ -4,6 +4,8 @@
 		<a href="/accounts/logout/">Log out</a>
 	{% else %}
 		<div>You are currently not logged in</div>
-		<a href="/accounts/login">Go to login page</a>
+		<button onclick='$("#tree_container").dynatree("getTree").activateKey("auth_node")'>Account management</button>
+<!-- 		<a href="/accounts/login">Go to login page</a> -->
 	{% endif %}	
 </div>
+

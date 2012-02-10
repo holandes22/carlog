@@ -8,8 +8,8 @@ from carlog.entries.models import Car, CarMechanic
 #This is the root tree
 tree_data = [
     {"title": "Search", "key": "search_node", "url": "/search/", "icon":"search.png"},
-    {"title": "Account creation", "key": "auth_node", "url": "/accounts/auth/", "icon":"users.png"},
-    {"title": "Account", "key": "account_node", "url": "/accounts/login-page/", "icon":"user.png"},
+    {"title": "Account", "key": "auth_node", "url": "/accounts/auth/", "icon":"users.png"},
+    #{"title": "Account", "key": "account_node", "url": "/accounts/login-page/", "icon":"user.png"},
     {
      "title": "Cars", 
      "isFolder": True, 
@@ -37,7 +37,7 @@ tree_data = [
 
 
 def get_tree_nodes(request):
-    tree_data[2]["title"] = "Account (%s)" % (request.user)
+    tree_data[1]["title"] = "Account (%s)" % (request.user)
     return HttpResponse(json.dumps(tree_data))
 
 def get_car_tree_nodes(request):
