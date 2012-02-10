@@ -7,8 +7,11 @@ from carlog.main import carlog_main, search_page, auth_page, login_page
 from django.contrib import admin
 admin.autodiscover()
 
+if DEBUG is False:
+    urlpatterns = patterns(url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),)
 
-urlpatterns = patterns('',
+
+urlpatterns += patterns('',
     url(r'^search/$', search_page),
     url(r'^social/', include('socialregistration.urls', namespace = 'socialregistration')),
     url(r'^accounts/auth/$', auth_page),
@@ -23,5 +26,3 @@ urlpatterns = patterns('',
     
 )
 
-if DEBUG is False:
-    urlpatterns += patterns(url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT}),)
